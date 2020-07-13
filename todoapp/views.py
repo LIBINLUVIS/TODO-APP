@@ -16,13 +16,14 @@ def index(request):
         
     temp = {'tasks':tasks,'form':form}
 
-    return render(request,'index.html',temp)
+    return render(request,'list.html',temp)
 
 
 def updateTask(request, pk):
 	var = task.objects.get(id=pk)
 
 	form = TaskForm(instance=var)
+
 
 	if request.method == 'POST':
 		form = TaskForm(request.POST, instance=var)
@@ -33,3 +34,13 @@ def updateTask(request, pk):
 	temp = {'form':form}
 
 	return render(request, 'update_task.html', temp)
+
+def deleteTask(request, pk):
+	item = task.objects.get(id=pk)
+
+	if request.method == 'POST':
+		item.delete()
+		return redirect('/')
+
+	context = {'item':item}
+	return render(request, 'delete.html',context)
